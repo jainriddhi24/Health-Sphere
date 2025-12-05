@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/healthsphere' });
+const pool = new Pool({ 
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres@localhost:5432/health_sphere'
+});
 
 async function migrate() {
   const uploadsRoot = path.join(process.cwd(), 'uploads');

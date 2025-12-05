@@ -67,6 +67,16 @@ export default function DietPlanPage() {
         const res = await API.get("/auth/profile", { headers: { Authorization: `Bearer ${token}` } });
         console.log("Profile response:", res.data.data);
         console.log("Processing result:", res.data.data?.processing_result);
+        
+        // Deep log the personalized diet plan if it exists
+        if (res.data.data?.processing_result?.personalized_diet_plan) {
+          console.log("✓ personalized_diet_plan found:", res.data.data.processing_result.personalized_diet_plan);
+        } else if (res.data.data?.processing_result) {
+          console.log("⚠️ processing_result exists but no personalized_diet_plan. Keys:", Object.keys(res.data.data.processing_result));
+        } else {
+          console.log("⚠️ No processing_result in profile");
+        }
+        
         setUser(res.data.data);
         
         // Generate default diet plans based on user profile
@@ -376,6 +386,20 @@ export default function DietPlanPage() {
           <h1 className="text-4xl font-bold mb-2">Your Personalized Diet Plans</h1>
           <p className="text-cyan-100 text-lg">Choose a plan that suits your health goals and lifestyle</p>
         </div>
+
+        {/* Debug Info - Remove in production */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mb-4 p-3 bg-purple-100 text-purple-900 text-xs rounded border border-purple-300">
+            <div className="font-bold mb-2">🔍 Debug Info:</div>
+            <div>processing_result: {user?.processing_result ? '✓ exists' : '✗ undefined'}</div>
+            {user?.processing_result && (
+              <div>personalized_diet_plan: {user.processing_result.personalized_diet_plan ? '✓ exists' : '✗ not found in processing_result'}</div>
+            )}
+            {user?.processing_result && !user.processing_result.personalized_diet_plan && (
+              <div className="mt-2">Available keys: {Object.keys(user.processing_result).join(', ')}</div>
+            )}
+          </div>
+        )}
 
         {/* Medical Report Based Personalized Diet Plan */}
         {user?.processing_result?.personalized_diet_plan && (
