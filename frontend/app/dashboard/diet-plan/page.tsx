@@ -65,6 +65,8 @@ export default function DietPlanPage() {
     (async () => {
       try {
         const res = await API.get("/auth/profile", { headers: { Authorization: `Bearer ${token}` } });
+        console.log("Profile response:", res.data.data);
+        console.log("Processing result:", res.data.data?.processing_result);
         setUser(res.data.data);
         
         // Generate default diet plans based on user profile
