@@ -22,7 +22,7 @@ export default function LogWorkoutPage() {
       console.log(res.data);
     } catch (err) {
       alert("Failed to log workout");
-      console.error(err);
+      console.warn(err);
     }
   };
 

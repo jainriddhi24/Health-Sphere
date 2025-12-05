@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
 // Shape of decoded token
 export interface TokenPayload {
-  userId: number;
+  userId: string;
   iat: number;
   exp: number;
 }
@@ -15,7 +15,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: {
-        userId: number;
+        userId: string;
       };
     }
   }

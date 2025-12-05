@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { scanFood, getFoodHistory } from '../controllers/food.controller';
+import { scanFood, getFoodHistory, feedbackFood, testScanFood } from '../controllers/food.controller';
 import { authMiddleware } from '../middleware/authMiddleware';
 
 // Configure multer for file uploads
@@ -25,8 +25,14 @@ router.get('/', (req, res) => res.json({ message: 'OK' }));
 // POST /food/scan (requires authentication)
 router.post('/scan', authMiddleware, upload.single('image'), scanFood);
 
+// POST /food/feedback (requires authentication)
+router.post('/feedback', authMiddleware, feedbackFood);
+
 // GET /food/history (requires authentication)
 router.get('/history', authMiddleware, getFoodHistory);
+
+// GET /food/test (no auth) — useful to validate ML service connectivity
+router.get('/test', testScanFood);
 
 export default router;
 

@@ -1,20 +1,29 @@
 from fastapi import FastAPI
+from app.routes import chatbot
+from app.routes.report_processor import router as report_router
+from app.routes.food_recognition import router as food_router
+import os
+from dotenv import load_dotenv
 
-# Import route handlers
-# from app.routes import food_recognition, risk_forecast, preventive_assistant, chatbot
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI(title="HealthSphere ML Services", version="1.0.0")
 
-# Include routers (commented out until implementation)
-# app.include_router(food_recognition.router)
-# app.include_router(risk_forecast.router)
-# app.include_router(preventive_assistant.router)
-# app.include_router(chatbot.router)
+# Include routers
+app.include_router(chatbot.router)
+app.include_router(report_router)
+app.include_router(food_router)
 
 
 @app.get("/")
 async def root():
     return {"status": "ML service running"}
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok", "service": "HealthSphere ML"}
 
 
 if __name__ == "__main__":

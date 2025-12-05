@@ -35,6 +35,11 @@ npm run dev
 
 The frontend will be available at `http://localhost:3000`
 
+### New pages
+
+- `/nutrition` — Food Recognition & Nutrition: upload images, view recognition results, nutrition breakdown and cultural diet recommendations.
+- `/preventive-assistant` — Preventive Health Assistant: enter a health profile to receive early warnings, preventive suggestions, and personalized daily tasks (requires ML/Backend endpoints to be implemented).
+
 **Available Scripts:**
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -113,6 +118,42 @@ psql -U postgres -d healthsphere -f database/seed.sql
 ```
 
 ## 🛠️ Development
+### Start all services at once (dev)
+
+If you don't want to start the frontend, backend, and ML service separately, there are two convenient options:
+
+- Windows PowerShell (new windows):
+	```powershell
+	npm run dev:all:ps
+	```
+	This will open three separate PowerShell windows for each service and run the respective dev command.
+
+- Cross-platform (single terminal):
+	```bash
+	npm run dev:all:concurrent
+	```
+	This uses `concurrently` to run all three dev servers inside a single terminal window; for this to work, ensure Python and `uvicorn` are installed and available in PATH (or activate a Python venv before running).
+
+
+### Setup & Start All Services in One Command
+
+If you want a single script to prepare and start everything in one go, use the PowerShell setup helper (Windows):
+
+```powershell
+./scripts/dev-setup.ps1
+```
+
+Once setup is complete, start all services together (single terminal):
+
+```bash
+npm run dev:all
+```
+
+or, on Windows (new windows for each service):
+
+```powershell
+npm run dev:all:ps
+```
 
 ### Running All Services
 
@@ -165,6 +206,24 @@ cd ml-services && source venv/bin/activate && uvicorn app.main:app --reload
 - [x] ML Services initialized with Python + FastAPI
 - [x] Database folder structure created
 - [x] Documentation folder created
+
+## 🧾 Medical report RAG feature
+
+The repository includes a new Retrieval-Augmented Generation (RAG) pipeline for processing medical reports and generating evidence-based, non-hallucinated summaries and diet plans.
+
+Key features:
+- OCR extraction (images & PDFs)
+- Fact extraction (numeric clinical values such as fasting glucose, HbA1c, LDL, HDL, BP)
+- Chunking, embedding indexing (FAISS/embeddings), hybrid retrieval (TF-IDF + embeddings)
+- Reranking and evidence filtering
+- Strict prompt assembly with `FACTS` and `EVIDENCE` blocks (only these blocks allowed inside LLM prompt)
+- Verification that the LLM output only references provided facts and evidence
+
+How to use:
+- Start ML service: `cd ml-services && uvicorn app.main:app --reload`
+- Start backend: `cd backend && npm run dev`
+- Upload a report through `POST /api/report/upload` or send a direct request to the ML service `POST /process-report` with `filePath` in JSON.
+
 
 ## 🤝 Contributing
 

@@ -5,14 +5,17 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
+    "db:init": "ts-node init-db.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "migrate:uploads": "ts-node scripts/migrate-uploads.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "form-data": "^4.0.0",
     "@types/multer": "^2.0.0",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
@@ -32,6 +35,7 @@
     "@types/pg": "^8.15.6",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
     "typescript": "^5.9.3"
   }
 }

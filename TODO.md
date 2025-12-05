@@ -1,0 +1,3 @@
+- [x] Fix verifier.py to ignore short/non-UUID evidence IDs (e.g., 'es')
+- [x] Add basic diagnosis logic in formatter.py fallback based on facts
+- [x] Lower diet recommendation thresholds in formatter.py (e.g., BP >130 instead of >140)

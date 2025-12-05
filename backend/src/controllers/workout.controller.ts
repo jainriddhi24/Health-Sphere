@@ -20,9 +20,15 @@ export const recommendWorkouts = async (req: Request, res: Response) => {
 // --------------------------------------------
 export const logWorkout = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user?.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, error: { code: 'NO_AUTH', message: 'Not authenticated' } });
+    }
 
     const { workout_type, duration_minutes, intensity, calories_burned } = req.body;
+    if (!workout_type || !duration_minutes) {
+      return res.status(400).json({ success: false, error: { code: 'INVALID_INPUT', message: 'workout_type and duration_minutes are required' } });
+    }
 
     const query = `
       INSERT INTO workouts (user_id, workout_type, duration_minutes, intensity, calories_burned)
@@ -46,7 +52,7 @@ export const logWorkout = async (req: Request, res: Response) => {
 // --------------------------------------------
 export const getHistory = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user?.userId;
     const limit = req.query.limit ? Number(req.query.limit) : 20;
 
     const query = `
@@ -70,7 +76,7 @@ export const getHistory = async (req: Request, res: Response) => {
 // --------------------------------------------
 export const getByIntensity = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user?.userId;
     const level = req.query.level;
 
     if (!level)
@@ -96,7 +102,7 @@ export const getByIntensity = async (req: Request, res: Response) => {
 // --------------------------------------------
 export const getByTypeSubstring = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user?.userId;
     const queryText = req.query.query;
 
     if (!queryText)

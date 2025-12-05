@@ -1,0 +1,8 @@
+Fasting Glucose: 160 mg/dL
+HbA1c: 7.5%
+Total Cholesterol: 220 mg/dL
+LDL: 140 mg/dL
+HDL: 40 mg/dL
+Triglycerides: 180 mg/dL
+Systolic BP: 150 mmHg
+Diastolic BP: 95 mmHg

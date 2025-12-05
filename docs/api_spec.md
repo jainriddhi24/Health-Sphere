@@ -662,7 +662,8 @@ Authorization: Bearer <access_token>
 ```json
 {
   "query": "string (required, min: 1, max: 1000)",
-  "context": "string (optional, additional context)"
+  "context": "string (optional, additional context)",
+  "allow_processing_result": "boolean (optional, default: true) - when false, the backend will not include stored user processing_result in the payload to the ML service"
 }
 ```
 

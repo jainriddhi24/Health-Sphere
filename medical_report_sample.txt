@@ -1,0 +1,73 @@
+PATIENT MEDICAL REPORT
+================================================
+
+Patient Name: Jane Doe
+Patient ID: DOE-12345
+Date of Report: November 30, 2025
+Provider: Dr. Johnson MD
+
+VITAL SIGNS AND MEASUREMENTS
+================================================
+Height: 165 cm
+Weight: 72 kg
+BMI: 26.4
+
+BLOOD PRESSURE READING
+Systolic BP: 148 mmHg
+Diastolic BP: 88 mmHg
+
+LABORATORY RESULTS - METABOLIC PANEL
+================================================
+
+Fasting Glucose: 162 mg/dL
+Reference Range: 70-100 mg/dL
+Status: ELEVATED
+
+HbA1c: 8.1%
+Reference Range: <5.7%
+Status: ELEVATED (indicates poor diabetes control)
+
+LIPID PANEL RESULTS
+================================================
+
+Total Cholesterol: 268 mg/dL
+Reference: <200 mg/dL
+Status: HIGH
+
+LDL Cholesterol: 172 mg/dL  
+Reference: <100 mg/dL
+Status: HIGH (bad cholesterol)
+
+HDL Cholesterol: 42 mg/dL
+Reference: >40 mg/dL  
+Status: LOW (good cholesterol)
+
+Triglycerides: 385 mg/dL
+Reference: <150 mg/dL
+Status: ELEVATED
+
+HEMOGLOBIN
+Hemoglobin: 13.5 g/dL
+Reference: 12-17 g/dL
+Status: NORMAL
+
+CLINICAL ASSESSMENT
+================================================
+
+Patient presents with elevated blood glucose levels and poor glycemic control as evidenced by HbA1c of 8.1%. The lipid profile shows dyslipidemia with high LDL and low HDL cholesterol, along with elevated triglycerides.
+
+Blood pressure is elevated at 148/88 mmHg, indicating stage 1 hypertension.
+
+RECOMMENDATIONS
+================================================
+
+1. Dietary modifications: Reduce refined carbohydrates and saturated fats
+2. Increase physical activity: Aim for 150 minutes moderate exercise per week
+3. Weight management: Target weight loss of 5-10%
+4. Monitor blood glucose levels regularly
+5. Follow up in 3 months for repeat labs
+6. Consider medication adjustment if lifestyle changes insufficient
+
+PROVIDER SIGNATURE
+Dr. Johnson, MD
+License: MD-54321

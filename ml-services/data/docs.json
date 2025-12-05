@@ -1,0 +1,10 @@
+[
+  {
+    "id": "user_2a058674-7a18-4774-9495-07dae9688bc7_processing_result",
+    "content": "{\"summary\":\"Patient Report Summary\\nPatient Name: JANE DOE\\n\\n\\nHealth Findings:\\n• Blood Pressure: 138/85 mmHg\",\"diagnosis\":\"Elevated blood pressure\",\"patient_name\":\"JANE DOE\",\"diet_plan\":[],\"sources\":[{\"id\":\"e633ac29-2c8b-40aa-bce0-25623901b599\",\"text\":\"  \\nInitial Vitals:  Temp $38.5^ \\\\circ\\\\text{C}$, HR 105 bpm, BP 138/85 mmHg, RR 22 breaths/min, \\n$\\\\text{SpO}_2$ 90% on room air.  \\nPhys\",\"start\":947,\"end\":961},{\"id\":\"dec6f45b-75f3-477e-86e8-8b733d237048\",\"text\":\"Initial Vitals:  Temp $38.5^ \\\\circ\\\\text{C}$, HR 105 bpm, BP 138/85 mmHg, RR 22 breaths/min, \\n$\\\\text{SpO}_2$ 90% on room air.  \",\"start\":950,\"end\":956},{\"id\":\"2094573e-920c-4e23-9b7c-d385b6dc6a71\",\"text\":\"ISCHARGE SUMMARY  \\n📋 Patient Demographics  \\nField  Detail  \\nPatient Name  JANE DOE  \\nMedical Record Number (MRN)  987654321  \\nDate of Birth (DOB)\",\"start\":63,\"end\":88}],\"confidence\":1,\"metadata\":{\"issues\":[],\"extracted_fields\":[\"systolic_bp\",\"diastolic_bp\",\"patient_name\"]},\"lab_values\":[{\"parameter\":\"Systolic Bp\",\"value\":138,\"unit\":\"mmHg\",\"field\":\"systolic_bp\"},{\"parameter\":\"Diastolic Bp\",\"value\":85,\"unit\":\"mmHg\",\"field\":\"diastolic_bp\"},{\"parameter\":\"Patient Name\",\"value\":\"JANE DOE\",\"unit\":\"\",\"field\":\"patient_name\"}]}",
+    "metadata": {
+      "source": "processing_result",
+      "user_id": "2a058674-7a18-4774-9495-07dae9688bc7"
+    }
+  }
+]

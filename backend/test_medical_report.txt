@@ -1,0 +1,36 @@
+COMPREHENSIVE METABOLIC PANEL REPORT
+Patient: John Smith
+Date: 2024-11-30
+
+LABORATORY RESULTS:
+
+Glucose (Fasting): 165 mg/dL [Reference: 70-100 mg/dL]
+HbA1c: 8.5% [Reference: <5.7%]
+
+LIPID PANEL:
+Total Cholesterol: 285 mg/dL [Reference: <200 mg/dL]
+LDL Cholesterol: 185 mg/dL [Reference: <100 mg/dL]
+HDL Cholesterol: 35 mg/dL [Reference: >40 mg/dL]
+Triglycerides: 450 mg/dL [Reference: <150 mg/dL]
+
+BLOOD PRESSURE:
+Systolic BP: 155 mmHg [Reference: <120 mmHg]
+Diastolic BP: 95 mmHg [Reference: <80 mmHg]
+
+CLINICAL ASSESSMENT:
+Patient shows elevated fasting glucose of 165 mg/dL indicating poor glycemic control. 
+HbA1c of 8.5% confirms persistent hyperglycemia over the past 3 months.
+
+Lipid profile is significantly abnormal:
+- Total cholesterol elevated at 285 mg/dL
+- LDL cholesterol very high at 185 mg/dL
+- HDL cholesterol low at 35 mg/dL  
+- Triglycerides markedly elevated at 450 mg/dL
+
+Blood pressure control is suboptimal with readings of 155/95 mmHg.
+
+RECOMMENDATIONS:
+- Increase physical activity
+- Dietary modifications to reduce refined carbohydrates and saturated fats
+- Consider medication adjustment
+- Follow-up testing in 3 months

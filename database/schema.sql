@@ -5,16 +5,50 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create enum types
-CREATE TYPE gender_type AS ENUM ('male', 'female', 'other');
-CREATE TYPE chronic_condition_type AS ENUM ('diabetes', 'hypertension', 'heart_disease', 'obesity', 'none');
-CREATE TYPE workout_type_enum AS ENUM ('cardio', 'strength', 'yoga', 'pilates', 'cycling', 'running', 'swimming', 'walking', 'other');
-CREATE TYPE intensity_type AS ENUM ('low', 'medium', 'high');
-CREATE TYPE risk_trend_type AS ENUM ('increasing', 'decreasing', 'stable');
-CREATE TYPE warning_type_enum AS ENUM ('diet', 'exercise', 'health_metric', 'chronic_condition');
-CREATE TYPE severity_type AS ENUM ('low', 'medium', 'high', 'critical');
+DO $$ BEGIN
+    CREATE TYPE gender_type AS ENUM ('male', 'female', 'other');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE chronic_condition_type AS ENUM ('diabetes', 'hypertension', 'heart_disease', 'obesity', 'none');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE workout_type_enum AS ENUM ('cardio', 'strength', 'yoga', 'pilates', 'cycling', 'running', 'swimming', 'walking', 'other');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE intensity_type AS ENUM ('low', 'medium', 'high');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE risk_trend_type AS ENUM ('increasing', 'decreasing', 'stable');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE warning_type_enum AS ENUM ('diet', 'exercise', 'health_metric', 'chronic_condition');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE severity_type AS ENUM ('low', 'medium', 'high', 'critical');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -24,13 +58,17 @@ CREATE TABLE users (
     height DECIMAL(5, 2) NOT NULL CHECK (height >= 100 AND height <= 250), -- in cm
     weight DECIMAL(5, 2) NOT NULL CHECK (weight >= 30 AND weight <= 300), -- in kg
     chronic_condition chronic_condition_type DEFAULT 'none',
+    medical_report_url VARCHAR(500),
+    processing_result JSONB, -- AI-generated summary, diet plan, danger flags from ML service
+    lifestyle JSONB,
+    personal_goals TEXT[],
     premium_unlocked BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Workouts table
-CREATE TABLE workouts (
+CREATE TABLE IF NOT EXISTS workouts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     workout_type workout_type_enum NOT NULL,
@@ -41,18 +79,23 @@ CREATE TABLE workouts (
 );
 
 -- Community challenges table
-CREATE TABLE community_challenges (
+CREATE TABLE IF NOT EXISTS community_challenges (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(200) NOT NULL,
     description TEXT,
     start_date TIMESTAMP WITH TIME ZONE NOT NULL,
     end_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    category VARCHAR(50),
+    difficulty VARCHAR(20) DEFAULT 'medium',
+    goal VARCHAR(300),
+    prize VARCHAR(300),
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CHECK (end_date > start_date)
 );
 
 -- Challenge participants table
-CREATE TABLE challenge_participants (
+CREATE TABLE IF NOT EXISTS challenge_participants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     challenge_id UUID NOT NULL REFERENCES community_challenges(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -61,8 +104,63 @@ CREATE TABLE challenge_participants (
     UNIQUE(challenge_id, user_id)
 );
 
+-- Community groups table
+CREATE TABLE IF NOT EXISTS community_groups (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    category VARCHAR(50),
+    max_members INTEGER,
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    image_url VARCHAR(500),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Community group members table
+CREATE TABLE IF NOT EXISTS community_group_members (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    group_id UUID NOT NULL REFERENCES community_groups(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(group_id, user_id)
+);
+
+-- Social posts table
+CREATE TABLE IF NOT EXISTS social_posts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    post_type VARCHAR(50) DEFAULT 'general',
+    image_url VARCHAR(500),
+    likes_count INTEGER DEFAULT 0,
+    comments_count INTEGER DEFAULT 0,
+    metadata JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Social post likes table
+CREATE TABLE IF NOT EXISTS social_post_likes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    post_id UUID NOT NULL REFERENCES social_posts(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(post_id, user_id)
+);
+
+-- Social post comments table
+CREATE TABLE IF NOT EXISTS social_post_comments (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    post_id UUID NOT NULL REFERENCES social_posts(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Meals table
-CREATE TABLE meals (
+CREATE TABLE IF NOT EXISTS meals (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     meal_label VARCHAR(200) NOT NULL,
@@ -75,8 +173,31 @@ CREATE TABLE meals (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Meal corrections table (user feedback for model corrections)
+CREATE TABLE IF NOT EXISTS meal_corrections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    image_path VARCHAR(500),
+    original_label VARCHAR(200),
+    corrected_label VARCHAR(200) NOT NULL,
+    confidence DECIMAL(3, 2),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Chat logs table for chatbot interactions
+CREATE TABLE IF NOT EXISTS chat_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    query TEXT NOT NULL,
+    response TEXT NOT NULL,
+    generated_json JSONB,
+    model VARCHAR(200) DEFAULT 'mock',
+    confidence DECIMAL(3,2),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Risk scores table
-CREATE TABLE risk_scores (
+CREATE TABLE IF NOT EXISTS risk_scores (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     risk_value DECIMAL(5, 2) NOT NULL CHECK (risk_value >= 0 AND risk_value <= 100),
@@ -86,7 +207,7 @@ CREATE TABLE risk_scores (
 );
 
 -- Chatbot usage table
-CREATE TABLE chatbot_usage (
+CREATE TABLE IF NOT EXISTS chatbot_usage (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     queries_count INTEGER DEFAULT 0,
@@ -129,8 +250,29 @@ CREATE INDEX idx_chatbot_usage_last_used ON chatbot_usage(last_used DESC);
 
 -- Community challenges indexes
 CREATE INDEX idx_community_challenges_dates ON community_challenges(start_date, end_date);
-CREATE INDEX idx_community_challenges_active ON community_challenges(start_date, end_date) 
-    WHERE start_date <= CURRENT_TIMESTAMP AND end_date >= CURRENT_TIMESTAMP;
+CREATE INDEX idx_community_challenges_category ON community_challenges(category);
+
+-- Community groups indexes
+CREATE INDEX idx_community_groups_name ON community_groups(name);
+CREATE INDEX idx_community_groups_category ON community_groups(category);
+CREATE INDEX idx_community_groups_created_by ON community_groups(created_by);
+
+-- Community group members indexes
+CREATE INDEX idx_community_group_members_group_id ON community_group_members(group_id);
+CREATE INDEX idx_community_group_members_user_id ON community_group_members(user_id);
+
+-- Social posts indexes
+CREATE INDEX idx_social_posts_user_id ON social_posts(user_id);
+CREATE INDEX idx_social_posts_type ON social_posts(post_type);
+CREATE INDEX idx_social_posts_created_at ON social_posts(created_at DESC);
+
+-- Social post likes indexes
+CREATE INDEX idx_social_post_likes_post_id ON social_post_likes(post_id);
+CREATE INDEX idx_social_post_likes_user_id ON social_post_likes(user_id);
+
+-- Social post comments indexes
+CREATE INDEX idx_social_post_comments_post_id ON social_post_comments(post_id);
+CREATE INDEX idx_social_post_comments_user_id ON social_post_comments(user_id);
 
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
