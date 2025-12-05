@@ -387,20 +387,6 @@ export default function DietPlanPage() {
           <p className="text-cyan-100 text-lg">Choose a plan that suits your health goals and lifestyle</p>
         </div>
 
-        {/* Debug Info - Remove in production */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mb-4 p-3 bg-purple-100 text-purple-900 text-xs rounded border border-purple-300">
-            <div className="font-bold mb-2">🔍 Debug Info:</div>
-            <div>processing_result: {user?.processing_result ? '✓ exists' : '✗ undefined'}</div>
-            {user?.processing_result && (
-              <div>personalized_diet_plan: {user.processing_result.personalized_diet_plan ? '✓ exists' : '✗ not found in processing_result'}</div>
-            )}
-            {user?.processing_result && !user.processing_result.personalized_diet_plan && (
-              <div className="mt-2">Available keys: {Object.keys(user.processing_result).join(', ')}</div>
-            )}
-          </div>
-        )}
-
         {/* Medical Report Based Personalized Diet Plan */}
         {user?.processing_result?.personalized_diet_plan && (
           <div className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl shadow-lg border-2 border-amber-200 p-8">
@@ -496,31 +482,35 @@ export default function DietPlanPage() {
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               {/* Recommendations */}
               {user.processing_result.personalized_diet_plan.recommendations.length > 0 && (
-                <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-600">
-                  <h3 className="font-bold text-lg text-green-900 mb-3">✅ Recommendations</h3>
-                  <ul className="space-y-2">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border-l-4 border-green-600 shadow-sm">
+                  <h3 className="font-bold text-lg text-green-900 mb-4 flex items-center gap-2">
+                    <span className="text-xl">✅</span> Do's
+                  </h3>
+                  <div className="grid grid-cols-1 gap-2">
                     {user.processing_result.personalized_diet_plan.recommendations.map((rec, idx) => (
-                      <li key={idx} className="text-sm text-green-800 flex items-start gap-2">
-                        <span className="text-green-600 mt-0.5">•</span>
-                        <span>{rec}</span>
-                      </li>
+                      <div key={idx} className="flex items-start gap-3 p-2 rounded bg-white/50">
+                        <span className="text-green-600 font-bold">✓</span>
+                        <span className="text-sm text-green-800 font-medium">{rec}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 
               {/* Restrictions */}
               {user.processing_result.personalized_diet_plan.restrictions.length > 0 && (
-                <div className="bg-red-50 rounded-lg p-4 border-l-4 border-red-600">
-                  <h3 className="font-bold text-lg text-red-900 mb-3">⚠️ Restrictions</h3>
-                  <ul className="space-y-2">
+                <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-lg p-5 border-l-4 border-red-600 shadow-sm">
+                  <h3 className="font-bold text-lg text-red-900 mb-4 flex items-center gap-2">
+                    <span className="text-xl">❌</span> Don'ts
+                  </h3>
+                  <div className="grid grid-cols-1 gap-2">
                     {user.processing_result.personalized_diet_plan.restrictions.map((rest, idx) => (
-                      <li key={idx} className="text-sm text-red-800 flex items-start gap-2">
-                        <span className="text-red-600 mt-0.5">•</span>
-                        <span>{rest}</span>
-                      </li>
+                      <div key={idx} className="flex items-start gap-3 p-2 rounded bg-white/50">
+                        <span className="text-red-600 font-bold">✕</span>
+                        <span className="text-sm text-red-800 font-medium">{rest}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>
