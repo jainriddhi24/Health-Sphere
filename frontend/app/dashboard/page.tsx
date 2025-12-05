@@ -142,7 +142,8 @@ export default function DashboardPage() {
               <li><Link href="/dashboard/workout" className="block px-3 py-2 rounded hover:bg-yellow-50 text-gray-700 hover:text-yellow-600">Workouts</Link></li>
               <li><Link href="/dashboard/schedule" className="block px-3 py-2 rounded hover:bg-green-50 text-gray-700 hover:text-green-600">Schedule</Link></li>
               <li><Link href="/dashboard/doctor-consultation" className="block px-3 py-2 rounded hover:bg-purple-50 text-gray-700 hover:text-purple-600">Consultations</Link></li>
-              <li><Link href="/dashboard/nutrition" className="block px-3 py-2 rounded hover:bg-cyan-50 text-gray-700 hover:text-cyan-600">Nutrition</Link></li>
+          <Link href="/dashboard/nutrition" className="block px-3 py-2 rounded hover:bg-cyan-50 text-gray-700 hover:text-cyan-600">Nutrition</Link>
+              <li><Link href="/dashboard/diet-plan" className="block px-3 py-2 rounded hover:bg-violet-50 text-gray-700 hover:text-violet-600">Diet Plans</Link></li>
               <li><Link href="/dashboard/preventive-assistant" className="block px-3 py-2 rounded hover:bg-teal-50 text-gray-700 hover:text-teal-600">Preventive Assistant</Link></li>
               <li><Link href="/community" className="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700 hover:text-indigo-600 font-semibold">Community & Challenges</Link></li>
             </ul>
@@ -270,6 +271,12 @@ export default function DashboardPage() {
             <p className="text-gray-600">Food recognition, nutritional summary, and personalized recommendations</p>
           </Link>
 
+          <Link href="/dashboard/diet-plan" className="bg-gradient-to-br from-violet-100 to-violet-50 rounded-2xl shadow-lg p-8 hover:shadow-xl hover:scale-105 transition transform cursor-pointer">
+            <div className="text-4xl mb-4">📊</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Diet Plans</h3>
+            <p className="text-gray-600">Personalized meal plans tailored to your health goals and preferences</p>
+          </Link>
+
           <Link href="/dashboard/preventive-assistant" className="bg-gradient-to-br from-teal-100 to-teal-50 rounded-2xl shadow-lg p-8 hover:shadow-xl hover:scale-105 transition transform cursor-pointer">
             <div className="text-4xl mb-4">⚕️</div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Preventive Assistant</h3>
@@ -279,11 +286,12 @@ export default function DashboardPage() {
 
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-4 gap-4">
             <Link href="/log-workout" className="py-3 px-4 bg-blue-600 text-white rounded-lg text-center">Log Workout</Link>
             <button onClick={() => { setChatOpen(true); setChatInitialQuery(undefined); }} className="py-3 px-4 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg text-center shadow hover:scale-105 transform transition">Chat with AI</button>
-            <button onClick={() => { setChatOpen(true); setChatInitialQuery('Explain HealthSphere: core purpose, main features, target users, and limitations succinctly.'); }} className="py-3 px-4 bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg text-center shadow hover:scale-105 transform transition">Explain HealthSphere</button>
+            <Link href="/dashboard/diet-plan" className="py-3 px-4 bg-violet-600 text-white rounded-lg text-center">View Diet Plans</Link>
             <Link href="/dashboard/nutrition" className="py-3 px-4 bg-cyan-600 text-white rounded-lg text-center">Nutrition</Link>
+            <button onClick={() => { setChatOpen(true); setChatInitialQuery('Explain HealthSphere: core purpose, main features, target users, and limitations succinctly.'); }} className="py-3 px-4 bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg text-center shadow hover:scale-105 transform transition">Explain HealthSphere</button>
             <Link href="/dashboard/preventive-assistant" className="py-3 px-4 bg-teal-600 text-white rounded-lg text-center">Assistant</Link>
             {user?.medical_report_url ? (
               <div className="flex flex-col items-center">
