@@ -37,6 +37,7 @@ class ProcessReportResponse(BaseModel):
     diagnosis: Optional[str] = ""
     patient_name: Optional[str] = ""
     diet_plan: List[str]
+    personalized_diet_plan: Optional[Dict[str, Any]] = None  # Personalized meal recommendations
     sources: List[EvidenceSnippet]
     confidence: float
     metadata: Dict[str, Any]
