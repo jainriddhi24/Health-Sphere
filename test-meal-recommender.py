@@ -34,13 +34,13 @@ diabetes_report = {
     "summary": """Patient shows elevated fasting glucose of 165 mg/dL indicating 
     poor glycemic control. HbA1c of 8.5% confirms persistent hyperglycemia over the past 3 months.""",
     "metadata": {
-        "danger_flags": ["high fasting glucose", "elevated blood sugar", "poor glycemic control"],
+        "issues": [],
         "extracted_fields": ["glucose", "hba1c"]
     },
-    "lab_values": {
-        "glucose": 165,
-        "hba1c": 8.5
-    }
+    "lab_values": [
+        {"parameter": "Fasting Glucose", "value": 165, "unit": "mg/dL", "field": "fasting_glucose"},
+        {"parameter": "HbA1c", "value": 8.5, "unit": "%", "field": "hba1c"}
+    ]
 }
 
 conditions = extract_conditions_from_report(diabetes_report)
@@ -66,13 +66,13 @@ hypertension_report = {
     "summary": """Blood pressure control is suboptimal with readings of 155/95 mmHg.
     Patient has elevated hypertension and requires dietary modifications.""",
     "metadata": {
-        "danger_flags": ["high blood pressure", "elevated bp", "hypertension"],
+        "issues": [],
         "extracted_fields": ["systolic_bp", "diastolic_bp"]
     },
-    "lab_values": {
-        "systolic_bp": 155,
-        "diastolic_bp": 95
-    }
+    "lab_values": [
+        {"parameter": "Systolic BP", "value": 155, "unit": "mmHg", "field": "systolic_bp"},
+        {"parameter": "Diastolic BP", "value": 95, "unit": "mmHg", "field": "diastolic_bp"}
+    ]
 }
 
 conditions = extract_conditions_from_report(hypertension_report)

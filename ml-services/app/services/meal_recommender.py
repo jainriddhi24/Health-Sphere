@@ -222,24 +222,9 @@ def extract_conditions_from_report(report_data: Dict[str, Any]) -> List[str]:
     """
     Extract diagnosed conditions from the processing result.
     Only uses explicitly stated conditions - no assumptions.
+    Checks summary text and lab values for condition indicators.
     """
     conditions = []
-    
-    # Check danger flags / metadata
-    metadata = report_data.get("metadata", {})
-    danger_flags = metadata.get("danger_flags", [])
-    
-    for flag in danger_flags:
-        # Handle both dict and string formats for flags
-        if isinstance(flag, dict):
-            flag_name = str(flag.get("name", "")).lower()
-        else:
-            flag_name = str(flag).lower()
-        
-        for condition_key, keywords in RISK_CONDITION_MAP.items():
-            if any(kw in flag_name for kw in keywords):
-                if condition_key not in conditions:
-                    conditions.append(condition_key)
     
     # Check summary text for mentioned conditions
     summary = str(report_data.get("summary", "")).lower()
@@ -247,6 +232,58 @@ def extract_conditions_from_report(report_data: Dict[str, Any]) -> List[str]:
         if any(kw in summary for kw in keywords):
             if condition_key not in conditions:
                 conditions.append(condition_key)
+    
+    # Check lab values for abnormal indicators
+    lab_values = report_data.get("lab_values", [])
+    if isinstance(lab_values, list):
+        for lab in lab_values:
+            if isinstance(lab, dict):
+                param = str(lab.get("parameter", "")).lower()
+                value = lab.get("value", None)
+                
+                # Check for diabetes indicators
+                if ("glucose" in param or "hba1c" in param or "blood sugar" in param) and value:
+                    try:
+                        val_num = float(value) if isinstance(value, (int, float, str)) else 0
+                        # Glucose > 126 or HbA1c > 6.5 suggests diabetes
+                        if ("glucose" in param and val_num > 126) or ("hba1c" in param and val_num > 6.5):
+                            if "diabetes" not in conditions:
+                                conditions.append("diabetes")
+                    except:
+                        pass
+                
+                # Check for hypertension indicators
+                if ("blood pressure" in param or "systolic" in param or "diastolic" in param or "bp" in param) and value:
+                    try:
+                        val_num = float(value) if isinstance(value, (int, float, str)) else 0
+                        # BP > 140/90 suggests hypertension
+                        if val_num > 140 or val_num > 90:
+                            if "hypertension" not in conditions:
+                                conditions.append("hypertension")
+                    except:
+                        pass
+                
+                # Check for cholesterol/lipid issues
+                if ("cholesterol" in param or "ldl" in param or "triglyceride" in param) and value:
+                    try:
+                        val_num = float(value) if isinstance(value, (int, float, str)) else 0
+                        # High cholesterol indicators
+                        if ("cholesterol" in param and val_num > 200) or ("ldl" in param and val_num > 100) or ("triglyceride" in param and val_num > 150):
+                            if "hyperlipidemia" not in conditions:
+                                conditions.append("hyperlipidemia")
+                    except:
+                        pass
+                
+                # Check for anemia indicators
+                if ("hemoglobin" in param or "hematocrit" in param or "iron" in param) and value:
+                    try:
+                        val_num = float(value) if isinstance(value, (int, float, str)) else 0
+                        # Low hemoglobin suggests anemia
+                        if ("hemoglobin" in param and val_num < 12) or ("hematocrit" in param and val_num < 36) or ("iron" in param and val_num < 60):
+                            if "anemia" not in conditions:
+                                conditions.append("anemia")
+                    except:
+                        pass
     
     return conditions
 

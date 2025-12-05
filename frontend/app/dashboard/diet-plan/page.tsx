@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import DashboardHeader from '@/components/DashboardHeader';
 import API from "@/lib/api/axios";
@@ -69,7 +68,7 @@ export default function DietPlanPage() {
         setUser(res.data.data);
         
         // Generate default diet plans based on user profile
-        const defaultPlans = generateDefaultPlans(res.data.data);
+        const defaultPlans = generateDefaultPlans();
         setDietPlans(defaultPlans);
         if (defaultPlans.length > 0) {
           setSelectedPlan(defaultPlans[0]);
@@ -84,7 +83,7 @@ export default function DietPlanPage() {
     })();
   }, []);
 
-  const generateDefaultPlans = (userProfile: UserProfile): DietPlan[] => {
+  const generateDefaultPlans = (): DietPlan[] => {
     const plans: DietPlan[] = [];
 
     // Plan 1: Balanced Diet
