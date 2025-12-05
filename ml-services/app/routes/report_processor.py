@@ -13,6 +13,7 @@ from app.services.gemini_api import call_gemini
 from app.services.verifier import verify_output
 from app.services.scorer import score_output
 from app.services.formatter import format_output
+from app.services.meal_recommender import generate_diet_plan_from_report
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="", tags=["report-processor"]) 
@@ -137,11 +138,19 @@ async def process_report(request: ProcessReportRequest):
                 'field': field
             })
         
+        # Generate personalized diet plan based on detected conditions
+        personalized_diet_plan = generate_diet_plan_from_report({
+            "summary": formatted['summary'],
+            "metadata": {"issues": issues, "extracted_fields": list(facts.keys())},
+            "lab_values": lab_values
+        })
+        
         return {
             "summary": formatted['summary'],
             "diagnosis": formatted.get('diagnosis', ''),
             "patient_name": facts.get('patient_name', ''),
             "diet_plan": formatted['diet_plan'],
+            "personalized_diet_plan": personalized_diet_plan,
             "sources": sources,
             "confidence": score,
             "lab_values": lab_values,  # Add extracted lab values for table display

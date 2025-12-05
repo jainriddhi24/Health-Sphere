@@ -31,6 +31,22 @@ interface UserProfile {
   height?: number;
   chronic_condition?: string;
   health_goals?: string;
+  processing_result?: {
+    personalized_diet_plan?: {
+      name: string;
+      conditions_detected: string[];
+      confidence: number;
+      meals: {
+        breakfast: Array<{name: string; calories: number}>;
+        lunch: Array<{name: string; calories: number}>;
+        dinner: Array<{name: string; calories: number}>;
+        snacks: Array<{name: string; calories: number}>;
+      };
+      recommendations: string[];
+      restrictions: string[];
+      note: string;
+    };
+  };
 }
 
 export default function DietPlanPage() {
@@ -359,6 +375,140 @@ export default function DietPlanPage() {
           <h1 className="text-4xl font-bold mb-2">Your Personalized Diet Plans</h1>
           <p className="text-cyan-100 text-lg">Choose a plan that suits your health goals and lifestyle</p>
         </div>
+
+        {/* Medical Report Based Personalized Diet Plan */}
+        {user?.processing_result?.personalized_diet_plan && (
+          <div className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl shadow-lg border-2 border-amber-200 p-8">
+            <div className="flex items-start gap-3 mb-6">
+              <span className="text-3xl">🏥</span>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-gray-900">Based on Your Medical Report</h2>
+                <p className="text-amber-700 text-sm mt-1">
+                  {user.processing_result.personalized_diet_plan.conditions_detected.length > 0
+                    ? `Detected Conditions: ${user.processing_result.personalized_diet_plan.conditions_detected.join(", ")}`
+                    : "General health recommendations"}
+                </p>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-semibold text-amber-700">
+                  Confidence: {Math.round(user.processing_result.personalized_diet_plan.confidence * 100)}%
+                </div>
+              </div>
+            </div>
+
+            {/* Daily Meals from Medical Report */}
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {/* Breakfast */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-yellow-500">
+                <h3 className="font-bold text-lg text-gray-900 mb-3">🌅 Breakfast</h3>
+                {user.processing_result.personalized_diet_plan.meals.breakfast.length > 0 ? (
+                  <div className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.meals.breakfast.map((meal, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-yellow-50 rounded">
+                        <span className="text-gray-800 font-medium">{meal.name}</span>
+                        <span className="text-sm text-yellow-700 font-semibold">{meal.calories} cal</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No breakfast recommendations</p>
+                )}
+              </div>
+
+              {/* Lunch */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                <h3 className="font-bold text-lg text-gray-900 mb-3">🍽️ Lunch</h3>
+                {user.processing_result.personalized_diet_plan.meals.lunch.length > 0 ? (
+                  <div className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.meals.lunch.map((meal, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-green-50 rounded">
+                        <span className="text-gray-800 font-medium">{meal.name}</span>
+                        <span className="text-sm text-green-700 font-semibold">{meal.calories} cal</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No lunch recommendations</p>
+                )}
+              </div>
+
+              {/* Dinner */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
+                <h3 className="font-bold text-lg text-gray-900 mb-3">🌙 Dinner</h3>
+                {user.processing_result.personalized_diet_plan.meals.dinner.length > 0 ? (
+                  <div className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.meals.dinner.map((meal, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                        <span className="text-gray-800 font-medium">{meal.name}</span>
+                        <span className="text-sm text-purple-700 font-semibold">{meal.calories} cal</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No dinner recommendations</p>
+                )}
+              </div>
+
+              {/* Snacks */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-pink-500">
+                <h3 className="font-bold text-lg text-gray-900 mb-3">🍎 Snacks</h3>
+                {user.processing_result.personalized_diet_plan.meals.snacks.length > 0 ? (
+                  <div className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.meals.snacks.map((meal, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-pink-50 rounded">
+                        <span className="text-gray-800 font-medium">{meal.name}</span>
+                        <span className="text-sm text-pink-700 font-semibold">{meal.calories} cal</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">No snack recommendations</p>
+                )}
+              </div>
+            </div>
+
+            {/* Recommendations and Restrictions */}
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {/* Recommendations */}
+              {user.processing_result.personalized_diet_plan.recommendations.length > 0 && (
+                <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-600">
+                  <h3 className="font-bold text-lg text-green-900 mb-3">✅ Recommendations</h3>
+                  <ul className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.recommendations.map((rec, idx) => (
+                      <li key={idx} className="text-sm text-green-800 flex items-start gap-2">
+                        <span className="text-green-600 mt-0.5">•</span>
+                        <span>{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Restrictions */}
+              {user.processing_result.personalized_diet_plan.restrictions.length > 0 && (
+                <div className="bg-red-50 rounded-lg p-4 border-l-4 border-red-600">
+                  <h3 className="font-bold text-lg text-red-900 mb-3">⚠️ Restrictions</h3>
+                  <ul className="space-y-2">
+                    {user.processing_result.personalized_diet_plan.restrictions.map((rest, idx) => (
+                      <li key={idx} className="text-sm text-red-800 flex items-start gap-2">
+                        <span className="text-red-600 mt-0.5">•</span>
+                        <span>{rest}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {/* Safety Note */}
+            <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-600">
+              <p className="text-sm text-blue-900 flex items-start gap-2">
+                <span className="text-blue-600 mt-0.5">ℹ️</span>
+                <span>{user.processing_result.personalized_diet_plan.note}</span>
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-4 gap-6 mb-8">
           {/* Diet Plans List */}
