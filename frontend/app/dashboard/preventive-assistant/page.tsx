@@ -28,7 +28,7 @@ export default function DashboardPreventiveAssistantPage() {
           </div>
           <div className="space-y-4">
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">Today's Alerts</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-2">Today&apos;s Alerts</h4>
               <div className="space-y-3">
                 {alerts.map((a, i) => <WarningCard key={i} warning={a} />)}
               </div>
