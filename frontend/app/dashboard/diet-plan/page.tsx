@@ -484,7 +484,7 @@ export default function DietPlanPage() {
               {user.processing_result.personalized_diet_plan.recommendations.length > 0 && (
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border-l-4 border-green-600 shadow-sm">
                   <h3 className="font-bold text-lg text-green-900 mb-4 flex items-center gap-2">
-                    <span className="text-xl">✅</span> Do's
+                    <span className="text-xl">✅</span> Do&apos;s
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
                     {user.processing_result.personalized_diet_plan.recommendations.map((rec, idx) => (
