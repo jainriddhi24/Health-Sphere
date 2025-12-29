@@ -162,7 +162,7 @@ export default function Chatbot({ premiumOnly = false, initialQuery, autoSend = 
                         <strong>Evidence snippets:</strong>
                         <ul className="list-disc list-inside mt-1 text-xs">
                           {meta.report_evidence.map((e: any) => (
-                            <li key={e.id}>{e.field}: "{e.text.slice(0,120)}..."</li>
+                            <li key={e.id}>{e.field}: &quot;{e.text.slice(0,120)}...&quot;</li>
                           ))}
                         </ul>
                       </div>

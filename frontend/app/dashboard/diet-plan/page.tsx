@@ -501,7 +501,7 @@ export default function DietPlanPage() {
               {user.processing_result.personalized_diet_plan.restrictions.length > 0 && (
                 <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-lg p-5 border-l-4 border-red-600 shadow-sm">
                   <h3 className="font-bold text-lg text-red-900 mb-4 flex items-center gap-2">
-                    <span className="text-xl">❌</span> Don'ts
+                    <span className="text-xl">❌</span> Don&apos;ts
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
                     {user.processing_result.personalized_diet_plan.restrictions.map((rest, idx) => (

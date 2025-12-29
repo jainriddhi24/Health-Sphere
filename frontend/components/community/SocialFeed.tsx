@@ -230,7 +230,7 @@ export default function SocialFeed() {
 
               {/* Post Content */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">What's on your mind?</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">What&apos;s on your mind?</label>
                 <textarea
                   value={postContent}
                   onChange={e => setPostContent(e.target.value)}
